@@ -1,0 +1,176 @@
+@import './reset.css';
+@import './theme.css';
+@import './animations.css';
+
+/* === App Layout === */
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--color-bone);
+  position: relative;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.status-bar-row {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--color-border-subtle);
+  background: var(--color-surface-raised);
+}
+
+/* === Paper Grain Texture Overlay === */
+
+.paper-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: multiply;
+}
+
+[data-theme="candlelight"] .paper-grain {
+  mix-blend-mode: soft-light;
+}
+
+/* === Vignette Effect === */
+
+.vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, var(--vignette-opacity)) 100%
+  );
+}
+
+/* === Engravings (dividers) === */
+
+.engraving {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  color: var(--color-ghost);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.engraving::before,
+.engraving::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-ghost) 20%,
+    var(--color-ghost) 80%,
+    transparent
+  );
+}
+
+/* === Status Stamps === */
+
+.status-stamp {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px var(--space-sm);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-ui);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+}
+
+.status-stamp--draft {
+  color: var(--color-status-draft);
+  border-color: var(--color-status-draft);
+  background: rgba(139, 115, 85, 0.08);
+}
+
+.status-stamp--revised {
+  color: var(--color-status-revised);
+  border-color: var(--color-status-revised);
+  background: rgba(74, 103, 65, 0.08);
+}
+
+.status-stamp--final {
+  color: var(--color-status-final);
+  border-color: var(--color-status-final);
+  background: rgba(42, 74, 107, 0.08);
+}
+
+.status-stamp--trash {
+  color: var(--color-status-trash);
+  border-color: var(--color-status-trash);
+  background: rgba(107, 58, 58, 0.08);
+}
+
+/* === Scrollbar (Custom ink line) === */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-ghost);
+  border-radius: 3px;
+  transition: background var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-wash);
+}
+
+/* === Focus visible === */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* === Utility === */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

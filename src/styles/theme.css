@@ -1,0 +1,128 @@
+/* Quillborn Theme Engine — CSS Custom Properties */
+
+:root {
+  /* === Classic Theme (Default) === */
+
+  /* Core palette */
+  --color-ink: #000000;
+  --color-bone: #F5F0EB;
+  --color-ink-wash: #2A2A2A;
+  --color-ghost: #C8C2BA;
+  --color-bone-dust: #E8E3DC;
+  --color-parchment: #F5F0EB;
+
+  /* Accent — user configurable, defaults to blood red */
+  --color-accent: #8B1A1A;
+  --color-accent-muted: rgba(139, 26, 26, 0.15);
+  --color-accent-hover: #A52222;
+
+  /* Semantic */
+  --color-selection: rgba(139, 26, 26, 0.12);
+  --color-focus-ring: var(--color-accent);
+  --color-border: var(--color-ghost);
+  --color-border-subtle: var(--color-bone-dust);
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FAF8F5;
+  --color-surface-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Status stamps */
+  --color-status-draft: #8B7355;
+  --color-status-revised: #4A6741;
+  --color-status-final: #2A4A6B;
+  --color-status-trash: #6B3A3A;
+
+  /* Typography */
+  --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-canvas: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-display: 'EB Garamond', serif;
+
+  --font-size-xs: 0.6875rem;
+  --font-size-sm: 0.8125rem;
+  --font-size-base: 0.9375rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: 2.25rem;
+  --font-size-canvas: 1.125rem;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Layout */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 0px;
+  --context-panel-width: 300px;
+  --chrome-height: 38px;
+  --canvas-max-width: 720px;
+  --canvas-padding: 64px;
+  --status-bar-height: 28px;
+
+  /* Borders */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --border-width: 1px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.2);
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 350ms ease;
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Paper texture */
+  --grain-opacity: 0.03;
+  --vignette-opacity: 0.05;
+
+  /* Z-index layers */
+  --z-base: 0;
+  --z-sidebar: 10;
+  --z-canvas: 5;
+  --z-context: 10;
+  --z-chrome: 100;
+  --z-modal: 200;
+  --z-tooltip: 300;
+  --z-palette: 400;
+  --z-notification: 500;
+}
+
+/* === Candlelight Theme (Dark) === */
+[data-theme="candlelight"] {
+  --color-ink: #E8DCC8;
+  --color-bone: #0D0B09;
+  --color-ink-wash: #B8AD9C;
+  --color-ghost: #3A342C;
+  --color-bone-dust: #1A1714;
+  --color-parchment: #12100D;
+
+  --color-accent: #C4553A;
+  --color-accent-muted: rgba(196, 85, 58, 0.2);
+  --color-accent-hover: #D4654A;
+
+  --color-selection: rgba(196, 85, 58, 0.18);
+  --color-border: #2A2520;
+  --color-border-subtle: #1E1B18;
+  --color-surface: #161310;
+  --color-surface-raised: #1E1B18;
+  --color-surface-overlay: rgba(0, 0, 0, 0.7);
+
+  --color-status-draft: #8B7355;
+  --color-status-revised: #5A7A51;
+  --color-status-final: #4A6A8B;
+  --color-status-trash: #8B4A4A;
+
+  --grain-opacity: 0.04;
+  --vignette-opacity: 0.15;
+}
