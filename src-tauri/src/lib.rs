@@ -20,6 +20,11 @@ pub fn run() {
             commands::manuscript::get_project_state,
             commands::export::export_markdown,
             commands::export::export_plain_text,
+            commands::export::export_html,
+            commands::export::export_latex,
+            commands::export::export_epub,
+            commands::search::search_manuscript,
+            commands::fonts::scan_fonts,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Quillborn");

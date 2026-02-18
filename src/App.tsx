@@ -15,19 +15,22 @@ import { ConstellationMap } from "@/components/constellation/ConstellationMap";
 import { ImportWizard } from "@/components/import/ImportWizard";
 import { BindingRitual } from "@/components/export/BindingRitual";
 import { ManuscriptHeartbeat } from "@/components/heartbeat/ManuscriptHeartbeat";
+import { ManuscriptSearch } from "@/components/search/ManuscriptSearch";
+import { LivingManuscript } from "@/components/threed/LivingManuscript";
 import { manuscriptStore } from "@/stores/manuscript";
 import { themeStore } from "@/stores/theme";
 import { keybindingStore } from "@/stores/keybindings";
 import { writingStore } from "@/stores/writing";
 import { planningStore } from "@/stores/planning";
 
-type ViewMode = "canvas" | "corkboard" | "outline" | "characters" | "wiki" | "timeline" | "constellation";
+type ViewMode = "canvas" | "corkboard" | "outline" | "characters" | "wiki" | "timeline" | "constellation" | "manuscript3d";
 
 const MOODS = ["tension", "grief", "joy", "dread", "calm", "chaos", "romance", "mystery", "action", "reflection"];
 
 const App: Component = () => {
   const [newProjectOpen, setNewProjectOpen] = createSignal(false);
   const [importOpen, setImportOpen] = createSignal(false);
+  const [searchOpen, setSearchOpen] = createSignal(false);
   const [bindingRitual, setBindingRitual] = createSignal<{ title: string; format: string } | null>(null);
   const [viewMode, setViewMode] = createSignal<ViewMode>("canvas");
   const { store } = manuscriptStore;
@@ -65,7 +68,7 @@ const App: Component = () => {
       { id: "unwriting-mode", label: "Toggle Unwriting Mode", category: "Writing", keys: "Cmd+Shift+d", action: () => writingStore.toggleUnwriting() },
       { id: "palimpsest", label: "Toggle Palimpsest Layer", category: "Writing", keys: "Cmd+/", action: () => writingStore.togglePalimpsest() },
       { id: "find-replace", label: "Find & Replace", category: "Editing", keys: "Cmd+f", action: () => writingStore.toggleFindReplace() },
-      { id: "find-manuscript", label: "Find in Manuscript", category: "Editing", keys: "Cmd+Shift+f", action: () => writingStore.toggleFindReplace() },
+      { id: "find-manuscript", label: "Find in Manuscript", category: "Editing", action: () => setSearchOpen(true) },
 
       // === Planning Views ===
       { id: "view-corkboard", label: "Corkboard View", category: "Planning", keys: "Cmd+Shift+b", action: () => setViewMode(viewMode() === "corkboard" ? "canvas" : "corkboard") },
@@ -82,6 +85,15 @@ const App: Component = () => {
       // === Export ===
       { id: "export-markdown", label: "Export as Markdown", category: "Export", action: () => handleExport("markdown") },
       { id: "export-plain-text", label: "Export as Plain Text", category: "Export", action: () => handleExport("txt") },
+      { id: "export-html", label: "Export as HTML", category: "Export", action: () => handleExportFormat("export_html", "html") },
+      { id: "export-latex", label: "Export as LaTeX", category: "Export", action: () => handleExportFormat("export_latex", "tex") },
+      { id: "export-epub", label: "Export as EPUB", category: "Export", action: () => handleExportFormat("export_epub", "epub") },
+
+      // === Search ===
+      { id: "search-manuscript", label: "Search Manuscript", category: "Navigation", keys: "Cmd+Shift+f", action: () => setSearchOpen(true) },
+
+      // === Settings Views ===
+      { id: "view-3d-book", label: "Living Manuscript 3D", category: "View", action: () => setViewMode(viewMode() === "manuscript3d" ? "canvas" : "manuscript3d") },
 
       // === Navigation ===
       { id: "command-palette", label: "Command Palette", category: "Navigation", keys: "Cmd+k", action: () => keybindingStore.togglePalette() },
@@ -170,6 +182,26 @@ const App: Component = () => {
     } catch (e) { console.error("Export failed:", e); }
   };
 
+  const handleExportFormat = async (cmd: string, ext: string) => {
+    if (!store.project) return;
+    try {
+      const { save } = await import("@tauri-apps/plugin-dialog");
+      const { invoke } = await import("@tauri-apps/api/core");
+      const filterName = ext.toUpperCase();
+      const path = await save({
+        title: `Export ${filterName}`,
+        defaultPath: `${store.project.metadata.title}.${ext}`,
+        filters: [{ name: filterName, extensions: [ext] }],
+      });
+      if (path) {
+        setBindingRitual({ title: store.project.metadata.title, format: ext });
+        setTimeout(async () => {
+          await invoke(cmd, { projectPath: store.project!.path, outputPath: path });
+        }, 100);
+      }
+    } catch (e) { console.error("Export failed:", e); }
+  };
+
   // === View Rendering ===
   const renderMainView = () => {
     switch (viewMode()) {
@@ -179,6 +211,7 @@ const App: Component = () => {
       case "wiki": return <WikiView />;
       case "timeline": return <TimelineView />;
       case "constellation": return <ConstellationMap />;
+      case "manuscript3d": return <LivingManuscript />;
       default: return <WritingCanvas />;
     }
   };
@@ -198,6 +231,7 @@ const App: Component = () => {
       <CommandPalette />
       <NewProjectModal open={newProjectOpen()} onClose={() => setNewProjectOpen(false)} onCreate={handleCreateProject} />
       <ImportWizard open={importOpen()} onClose={() => setImportOpen(false)} />
+      <ManuscriptSearch open={searchOpen()} onClose={() => setSearchOpen(false)} />
       <Show when={bindingRitual()}>
         <BindingRitual
           title={bindingRitual()!.title}
